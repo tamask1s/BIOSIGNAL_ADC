@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="BIOSIGNAL_ADC" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/BIOSIGNAL_ADC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/BIOSIGNAL_ADC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=c++11" />
+			<Add option="-std=c11" />
+			<Add option="-fexceptions" />
+			<Add option="-D_WIN32_WINNT=0x0501" />
+			<Add directory="../../Libs/3rdParty/LIB_ASIO/asio-1.28.0/include" />
+		</Compiler>
+		<Linker>
+			<Add library="Ws2_32" />
+			<Add library="mswsock" />
+		</Linker>
+		<Unit filename="FifoBuffer.h" />
+		<Unit filename="ZaxJsonParser.cpp" />
+		<Unit filename="ZaxJsonParser.h" />
+		<Unit filename="ads1293.cpp" />
+		<Unit filename="ads1293.h" />
+		<Unit filename="compatibility.h" />
+		<Unit filename="data_server.h" />
+		<Unit filename="data_server_serial.cpp" />
+		<Unit filename="data_server_tcp.cpp" />
+		<Unit filename="example_command_port81.json" />
+		<Unit filename="file_io.cpp" />
+		<Unit filename="file_io.h" />
+		<Unit filename="html_favicon.h" />
+		<Unit filename="html_main.h" />
+		<Unit filename="http_file_handler.cpp" />
+		<Unit filename="http_file_handler.h" />
+		<Unit filename="http_rest_api.cpp" />
+		<Unit filename="http_rest_api.h" />
+		<Unit filename="http_server.h" />
+		<Unit filename="http_server_serial.cpp" />
+		<Unit filename="http_server_tcp.cpp" />
+		<Unit filename="main.cpp" />
+		<Unit filename="print.h" />
+		<Unit filename="rest_api.cpp" />
+		<Unit filename="rest_api.h" />
+		<Unit filename="scheduler.h" />
+		<Unit filename="scheduler_chrono.cpp" />
+		<Unit filename="string_ext.h" />
+		<Unit filename="wifi_connection.cpp" />
+		<Unit filename="wifi_connection.h" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
