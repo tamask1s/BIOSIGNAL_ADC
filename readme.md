@@ -27,3 +27,12 @@ ap mode is automatically activated if wifi is enabled. ap mode is working even i
 ip:port on router network: 192.168.1.184:80  
 ip:port on sof ap mode: 192.168.4.1:80  
 bluetooth device name: ESP32-BT-Slave  
+
+SigForge scripts:
+
+Local host server:       DataAq(9, 127.0.0.1:80, 2000 2000 2000, 1 1 1, 0 1 2, 100, 4, FileName04.bdf);
+WiFi non AP mode:        DataAq(9, 192.168.1.184:80, 2000 2000 2000, 1 1 1, 0 1 2, 100, 4, FileName04.bdf);
+AP mode:                 DataAq(9, 192.168.4.1:80, 2000 2000 2000, 1 1 1, 0 1 2, 100, 4, FileName04.bdf);
+
+FsmPlayer                DataAq(9, 127.0.0.1:8070, 2000 2000 2000, 1 1 1, 0 1 2, 100, 4, FileName04.bdf); 
+Bluetooth                DataAq(11, COM3, 2000 2000 2000, 1 1 1, 0 1 2, 100, 4, FileName04.bdf);
