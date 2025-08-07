@@ -26,8 +26,8 @@ public:
         acceptor_.on("/api.api", HTTP_POST, [](AsyncWebServerRequest * request) {}, NULL, [this](AsyncWebServerRequest * request, uint8_t *data, size_t len, size_t index, size_t total)
         {
             data[len] = 0;
-            Serial.print(request->methodToString());
-            Serial.println(request->url());
+            print(request->methodToString());
+            println(request->url());
             size_t response_len = 0;
             const char* response = 0;
             for (auto handler : msg_handlers_)
@@ -41,8 +41,8 @@ public:
         });
         acceptor_.on(0, HTTP_ANY, [this](AsyncWebServerRequest * request)
         {
-            Serial.print(request->methodToString());
-            Serial.println(request->url());
+            print(request->methodToString());
+            println(request->url());
             size_t response_len = 0;
             const char* response = 0;
             for (auto handler : msg_handlers_)
