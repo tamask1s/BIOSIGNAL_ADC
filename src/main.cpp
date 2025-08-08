@@ -63,15 +63,15 @@ public:
     {
         if (current_address_to_fill)
         {
-//            for (uint16_t i = 0; i < NRCHANNELS; ++i)
-//                for (int k = 0; k < BYTESPERCHANNEL; ++k)
-//                    current_address_to_fill[i * NR_SAMPLES_PER_PACKET_PER_CHANNEL * BYTESPERCHANNEL + packet_sample_iterator_ * BYTESPERCHANNEL + k] = sample_bytes[i * BYTESPERCHANNEL + k];
+           for (uint16_t i = 0; i < NRCHANNELS; ++i)
+               for (int k = 0; k < BYTESPERCHANNEL; ++k)
+                   current_address_to_fill[i * NR_SAMPLES_PER_PACKET_PER_CHANNEL * BYTESPERCHANNEL + packet_sample_iterator_ * BYTESPERCHANNEL + k] = sample_bytes[i * BYTESPERCHANNEL + k];
 //            for (int k = 0; k < BYTESPERCHANNEL; ++k)
 //                for (uint16_t i = 0; i < NRCHANNELS; ++i)
 //                    current_address_to_fill[k * NR_SAMPLES_PER_PACKET_PER_CHANNEL * NRCHANNELS + packet_sample_iterator_ * NRCHANNELS + i] = sample_bytes[i * BYTESPERCHANNEL + k];
-            for (uint16_t i = 0; i < NRCHANNELS; ++i)
-                for (int k = 0; k < BYTESPERCHANNEL; ++k)
-                    current_address_to_fill[(i * BYTESPERCHANNEL + k) * NR_SAMPLES_PER_PACKET_PER_CHANNEL + packet_sample_iterator_] = sample_bytes[i * BYTESPERCHANNEL + k];
+            // for (uint16_t i = 0; i < NRCHANNELS; ++i)
+            //     for (int k = 0; k < BYTESPERCHANNEL; ++k)
+            //         current_address_to_fill[(i * BYTESPERCHANNEL + k) * NR_SAMPLES_PER_PACKET_PER_CHANNEL + packet_sample_iterator_] = sample_bytes[i * BYTESPERCHANNEL + k];
             ++packet_sample_iterator_;
             if (packet_sample_iterator_ == NR_SAMPLES_PER_PACKET_PER_CHANNEL)
             {
