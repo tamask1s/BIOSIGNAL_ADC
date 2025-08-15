@@ -17,7 +17,7 @@
 #include "scheduler.h"
 #include "file_io.h"
 #include "data_server.h"
-#include "ads1293.h"
+#include "ads1298.h"
 
 using namespace std;
 
@@ -92,7 +92,7 @@ public:
 class analog_data_aq
 {
     buffer_writer& buffer_writer_;
-    ads1293 adc;
+    ads1298 adc;
 
 public:
     static int const PIN_CSB = 15;
@@ -100,11 +100,15 @@ public:
     static int const PIN_MOSI = 13;
     static int const PIN_MISO = 12;
     static int const PIN_ALAB = 2;
-    static int const PIN_DRDY = 4;
+    static int const PIN_DRDY = 35;
+    static int const PIN_START = 23;
+    static int const PIN_PWDN = 22;
+    static int const PIN_RESET = 19;
+    static int const PIN_CLKSEL = 18;
 
     analog_data_aq(buffer_writer& buffer_writer)
         : buffer_writer_(buffer_writer),
-          adc(PIN_SCLK, PIN_MISO, PIN_MOSI, PIN_CSB, PIN_DRDY, PIN_CSB)
+          adc(PIN_SCLK, PIN_MISO, PIN_MOSI, PIN_CSB, PIN_DRDY, PIN_CSB, PIN_START,PIN_PWDN,PIN_RESET,PIN_CLKSEL)
     {
         adc.init_adc();
     }
@@ -411,6 +415,7 @@ void ARDUINO_ISR_ATTR isr()
     //sleep_ms(1);
     if (application_->is_sampling_.serial || application_->is_sampling_.bluetooth || application_->is_sampling_.tcp)
         application_->analog_data_aq_.aquire_data();
+        println("isr");
 }
 
 //Serial.print("Current CPU core ");
