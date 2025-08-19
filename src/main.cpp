@@ -20,7 +20,6 @@
 #include "ads1298.h"
 
 using namespace std;
-
 #if defined(ARDUINO)
 constexpr char ip_addr[] = "192.168.1.184";
 #else
@@ -414,8 +413,7 @@ void ARDUINO_ISR_ATTR isr()
 {
     //sleep_ms(1);
     if (application_->is_sampling_.serial || application_->is_sampling_.bluetooth || application_->is_sampling_.tcp)
-        application_->analog_data_aq_.aquire_data();
-        println("isr");
+        application_->analog_data_aq_.aquire_data();       
 }
 
 //Serial.print("Current CPU core ");

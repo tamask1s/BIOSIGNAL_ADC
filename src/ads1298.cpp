@@ -2,6 +2,9 @@
 #include <SPI.h>
 #include "ads1298.h"
 
+#define REMAINING_CHANNELS  5
+#define BYTES_PER_CHANNEL   3
+
 ///////// ADS1298 REGISTER MAP ///////////
 
 #define ID_REG          0x00
@@ -31,12 +34,12 @@
 #define CONFIG4_REG     0X17
 #define WCT1_REG        0X18
 #define WCT2_REG        0X19
+
 // SPI beállítások (ADS129x: CPOL=0, CPHA=1 -> MODE1)
 #define ADS_SPI_FREQ    1000000 // 1 MHz van konfigolva a BT832 firmware-ben
 SPISettings adsSpi(ADS_SPI_FREQ, MSBFIRST, SPI_MODE1);
 
-#define REMAINING_CHANNELS 5
-#define BYTES_PER_CHANNEL 3
+////// OPCODE COMMANDS /////////
 
 #define WAKEUP_CMD 0x02
 #define STANDBY_CMD 0x04
@@ -51,8 +54,7 @@ ads1298::ads1298(uint8_t sck, uint8_t miso, uint8_t mosi, uint8_t ss, uint8_t dr
     : pin_cs_(chip_select),
       pin_drdy_(drdy),
       pin_pwdn_(pwdn),
-      pin_reset_(adc_reset),
-      pin_start_(start)
+      pin_reset_(adc_reset)      
 {
     SPI.begin(sck, miso, mosi, ss);
     pinMode(pin_drdy_, INPUT_PULLUP);
@@ -73,25 +75,19 @@ void ads1298::init_adc()
     delayMicroseconds(200);
     digitalWrite(pin_reset_,LOW);
     delayMicroseconds(20);
-    stop_data_stream(); // // Device Wakes Up in RDATAC Mode, so Send SDATAC Command so Registers can be Written
-    uint8_t reg = read_reg(CONFIG1_REG);
-    Serial.print("Config1 reg default:");
-    Serial.println(reg);
-    write_reg(CONFIG1_REG, 0b10000000 | reg);
-    reg = read_reg(CONFIG1_REG);
-    Serial.print("Config1 reg changed:");
-    Serial.println(reg);
-     write_reg(CONFIG1_REG, 0b11000110);
-     write_reg(CONFIG2_REG, 0b00110011);
-     write_reg(CONFIG3_REG, 0b11101101);
-     write_reg(CH1SET_REG, 0b00010000);
-     write_reg(CH2SET_REG, 0b00010000);
-     write_reg(CH3SET_REG, 0b00010000);
-     write_reg(CH4SET_REG, 0b00010000);
-     write_reg(CH5SET_REG, 0b00010000);
-     write_reg(CH6SET_REG, 0b00010000);
-     write_reg(CH7SET_REG, 0b00010000);
-     write_reg(CH8SET_REG, 0b00010000);
+    digitalWrite(pin_reset_,HIGH);
+    stop_data_stream(); // // Device Wakes Up in RDATAC Mode, so Send SDATAC Command so Registers can be Written    
+    write_reg(CONFIG1_REG, 0b11000110);
+    write_reg(CONFIG2_REG, 0b00110011);
+    write_reg(CONFIG3_REG, 0b11101101);
+    write_reg(CH1SET_REG, 0b00010000);
+    write_reg(CH2SET_REG, 0b00010000);
+    write_reg(CH3SET_REG, 0b00010000);
+    write_reg(CH4SET_REG, 0b00010000);
+    write_reg(CH5SET_REG, 0b00010000);
+    write_reg(CH6SET_REG, 0b00010000);
+    write_reg(CH7SET_REG, 0b00010000);
+    write_reg(CH8SET_REG, 0b00010000);
     start_data_stream();
      
 }
@@ -130,12 +126,14 @@ bool ads1298::is_data_ready()
 void ads1298::read_data_stream(uint8_t* data, int length)
 {
     SPI.beginTransaction(adsSpi);
-    digitalWrite(pin_cs_, LOW);
-   SPI.transfer(0xff);
+    digitalWrite(pin_cs_, LOW);    
+    SPI.transfer(0xff); // Status word
+    SPI.transfer(0xff); // Status word
+    SPI.transfer(0xff); // Status word
     for (int i = 0; i < length; i++)
-        data[i] = SPI.transfer(0xff);
+        data[i] = SPI.transfer(0xff); // Reading the neccesarry channel data
     for (int i = 0; i < REMAINING_CHANNELS * BYTES_PER_CHANNEL; i++)
-        SPI.transfer(0xff);
+        SPI.transfer(0xff); // Reading the remaining bytes from the 8 channel
     digitalWrite(pin_cs_, HIGH);
     SPI.endTransaction();
 }
@@ -148,9 +146,8 @@ void ads1298::stop_data_stream()
       SPI.endTransaction();
 }
 void ads1298::start_data_stream()
-{
-    
-      SPI.beginTransaction(adsSpi);
+{    
+    SPI.beginTransaction(adsSpi);
     digitalWrite(pin_cs_, LOW);
     SPI.transfer(START_CMD);    
     SPI.transfer(RDATAC_CMD);
